@@ -21,7 +21,7 @@
         </div>
     @endif
 
-    <a href="{{ route('pets.create') }}">Add</a>
+    <a href="{{ route('pets.create') }}">Add new</a>
     <form action="{{ route('pets.index') }}" method="GET">
         <label for="status">Select status:</label>
         <select name="status" id="status">

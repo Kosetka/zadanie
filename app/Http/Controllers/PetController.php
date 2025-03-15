@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Http;
 
 class PetController extends Controller
 {
+    public static $url = 'https://petstore.swagger.io/v2/pet';
+
     public function create()
     {
         return view('pets.add');
@@ -35,7 +37,7 @@ class PetController extends Controller
             'status' => $validated['status'],
         ];
 
-        $response = Http::post('https://petstore.swagger.io/v2/pet', $petData);
+        $response = Http::post(self::$url, $petData);
 
         if ($response->successful()) {
             $responseData = $response->json();
@@ -57,7 +59,7 @@ class PetController extends Controller
         $page = $request->get('page', 1);
         $limit = 25;
 
-        $response = Http::get("https://petstore.swagger.io/v2/pet/findByStatus", [
+        $response = Http::get(self::$url . "/findByStatus", [
             'status' => $status
         ]);
 
@@ -96,7 +98,7 @@ class PetController extends Controller
 
     public function destroy($id)
     {
-        $response = Http::delete("https://petstore.swagger.io/v2/pet/{$id}");
+        $response = Http::delete(self::$url . "/{$id}");
 
         if ($response->successful()) {
             return redirect()->route('pets.index')->with('success', 'Pet has been deleted.');
@@ -115,7 +117,7 @@ class PetController extends Controller
 
     public function edit($id)
     {
-        $response = Http::get("https://petstore.swagger.io/v2/pet/{$id}");
+        $response = Http::get(self::$url . "/{$id}");
 
         if ($response->status() === 404) {
             return redirect()->route('pets.index')->with('error', 'Pet not found.');
@@ -146,7 +148,7 @@ class PetController extends Controller
             'photoUrls' => $validated['photoUrls'] ?? [],
         ];
 
-        $response = Http::put("https://petstore.swagger.io/v2/pet", $data);
+        $response = Http::put(self::$url, $data);
 
         if ($response->status() === 400) {
             return redirect()->route('pets.index')->with('error', 'Invalid ID supplied.');
